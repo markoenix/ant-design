@@ -1,11 +1,15 @@
+import * as React from 'react';
+import type { AlignType } from '@rc-component/trigger';
 import type { PickerMode } from 'rc-picker/lib/interface';
-import type { DirectionType } from '../config-provider';
+
 import type { SelectCommonPlacement } from '../_util/motion';
-import type { PickerLocale } from './generatePicker';
+import type { DirectionType } from '../config-provider';
+import useSelectIcons from '../select/useIcons';
+import type { PickerLocale, PickerProps } from './generatePicker';
 
 export function getPlaceholder(
-  picker: PickerMode | undefined,
   locale: PickerLocale,
+  picker?: PickerMode,
   customizePlaceholder?: string,
 ): string {
   if (customizePlaceholder !== undefined) {
@@ -31,8 +35,8 @@ export function getPlaceholder(
 }
 
 export function getRangePlaceholder(
-  picker: PickerMode | undefined,
   locale: PickerLocale,
+  picker?: PickerMode,
   customizePlaceholder?: [string, string],
 ) {
   if (customizePlaceholder !== undefined) {
@@ -60,7 +64,7 @@ export function getRangePlaceholder(
 export function transPlacement2DropdownAlign(
   direction: DirectionType,
   placement?: SelectCommonPlacement,
-) {
+): AlignType {
   const overflow = {
     adjustX: 1,
     adjustY: 1,
@@ -95,17 +99,36 @@ export function transPlacement2DropdownAlign(
       };
     }
     default: {
-      return direction === 'rtl'
-        ? {
-            points: ['tr', 'br'],
-            offset: [0, 4],
-            overflow,
-          }
-        : {
-            points: ['tl', 'bl'],
-            offset: [0, 4],
-            overflow,
-          };
+      return {
+        points: direction === 'rtl' ? ['tr', 'br'] : ['tl', 'bl'],
+        offset: [0, 4],
+        overflow,
+      };
     }
   }
+}
+
+export function useIcons(props: Pick<PickerProps, 'allowClear' | 'removeIcon'>, prefixCls: string) {
+  const { allowClear = true } = props;
+
+  const { clearIcon, removeIcon } = useSelectIcons({
+    ...props,
+    prefixCls,
+    componentName: 'DatePicker',
+  });
+
+  const mergedAllowClear = React.useMemo(() => {
+    if (allowClear === false) {
+      return false;
+    }
+
+    const allowClearConfig = allowClear === true ? {} : allowClear;
+
+    return {
+      clearIcon: clearIcon as React.ReactNode,
+      ...allowClearConfig,
+    };
+  }, [allowClear, clearIcon]);
+
+  return [mergedAllowClear, removeIcon] as const;
 }

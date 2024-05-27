@@ -1,6 +1,305 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`renders ./components/carousel/demo/autoplay.md extend context correctly 1`] = `
+exports[`renders components/carousel/demo/arrows.tsx extend context correctly 1`] = `
+Array [
+  <div
+    class="ant-carousel"
+  >
+    <div
+      class="slick-slider slick-initialized"
+      dir="ltr"
+    >
+      <button
+        aria-label="prev"
+        class="slick-arrow slick-prev slick-disabled"
+        data-role="none"
+        style="display: block;"
+        type="button"
+      />
+      <div
+        class="slick-list"
+      >
+        <div
+          class="slick-track"
+          style="opacity: 1; transform: translate3d(0px, 0px, 0px);"
+        >
+          <div
+            aria-hidden="false"
+            class="slick-slide slick-active slick-current"
+            data-index="0"
+            style="outline: none; width: 0px;"
+            tabindex="-1"
+          >
+            <div>
+              <div
+                style="width: 100%; display: inline-block;"
+                tabindex="-1"
+              >
+                <h3
+                  style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+                >
+                  1
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div
+            aria-hidden="true"
+            class="slick-slide"
+            data-index="1"
+            style="outline: none; width: 0px;"
+            tabindex="-1"
+          >
+            <div>
+              <div
+                style="width: 100%; display: inline-block;"
+                tabindex="-1"
+              >
+                <h3
+                  style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+                >
+                  2
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div
+            aria-hidden="true"
+            class="slick-slide"
+            data-index="2"
+            style="outline: none; width: 0px;"
+            tabindex="-1"
+          >
+            <div>
+              <div
+                style="width: 100%; display: inline-block;"
+                tabindex="-1"
+              >
+                <h3
+                  style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+                >
+                  3
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div
+            aria-hidden="true"
+            class="slick-slide"
+            data-index="3"
+            style="outline: none; width: 0px;"
+            tabindex="-1"
+          >
+            <div>
+              <div
+                style="width: 100%; display: inline-block;"
+                tabindex="-1"
+              >
+                <h3
+                  style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+                >
+                  4
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        aria-label="next"
+        class="slick-arrow slick-next"
+        data-role="none"
+        style="display: block;"
+        type="button"
+      />
+      <ul
+        class="slick-dots slick-dots-bottom"
+        style="display: block;"
+      >
+        <li
+          class="slick-active"
+        >
+          <button>
+            1
+          </button>
+        </li>
+        <li
+          class=""
+        >
+          <button>
+            2
+          </button>
+        </li>
+        <li
+          class=""
+        >
+          <button>
+            3
+          </button>
+        </li>
+        <li
+          class=""
+        >
+          <button>
+            4
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>,
+  <br />,
+  <div
+    class="ant-carousel ant-carousel-vertical"
+  >
+    <div
+      class="slick-slider slick-vertical slick-initialized"
+      dir="ltr"
+    >
+      <button
+        aria-label="prev"
+        class="slick-arrow slick-prev slick-disabled"
+        data-role="none"
+        style="display: block;"
+        type="button"
+      />
+      <div
+        class="slick-list"
+        style="height: 0px;"
+      >
+        <div
+          class="slick-track"
+          style="opacity: 1; transform: translate3d(0px, 0px, 0px);"
+        >
+          <div
+            aria-hidden="false"
+            class="slick-slide slick-active slick-current"
+            data-index="0"
+            style="outline: none; width: 0px;"
+            tabindex="-1"
+          >
+            <div>
+              <div
+                style="width: 100%; display: inline-block;"
+                tabindex="-1"
+              >
+                <h3
+                  style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+                >
+                  1
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div
+            aria-hidden="true"
+            class="slick-slide"
+            data-index="1"
+            style="outline: none; width: 0px;"
+            tabindex="-1"
+          >
+            <div>
+              <div
+                style="width: 100%; display: inline-block;"
+                tabindex="-1"
+              >
+                <h3
+                  style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+                >
+                  2
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div
+            aria-hidden="true"
+            class="slick-slide"
+            data-index="2"
+            style="outline: none; width: 0px;"
+            tabindex="-1"
+          >
+            <div>
+              <div
+                style="width: 100%; display: inline-block;"
+                tabindex="-1"
+              >
+                <h3
+                  style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+                >
+                  3
+                </h3>
+              </div>
+            </div>
+          </div>
+          <div
+            aria-hidden="true"
+            class="slick-slide"
+            data-index="3"
+            style="outline: none; width: 0px;"
+            tabindex="-1"
+          >
+            <div>
+              <div
+                style="width: 100%; display: inline-block;"
+                tabindex="-1"
+              >
+                <h3
+                  style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+                >
+                  4
+                </h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button
+        aria-label="next"
+        class="slick-arrow slick-next"
+        data-role="none"
+        style="display: block;"
+        type="button"
+      />
+      <ul
+        class="slick-dots slick-dots-left"
+        style="display: block;"
+      >
+        <li
+          class="slick-active"
+        >
+          <button>
+            1
+          </button>
+        </li>
+        <li
+          class=""
+        >
+          <button>
+            2
+          </button>
+        </li>
+        <li
+          class=""
+        >
+          <button>
+            3
+          </button>
+        </li>
+        <li
+          class=""
+        >
+          <button>
+            4
+          </button>
+        </li>
+      </ul>
+    </div>
+  </div>,
+]
+`;
+
+exports[`renders components/carousel/demo/arrows.tsx extend context correctly 2`] = `[]`;
+
+exports[`renders components/carousel/demo/autoplay.tsx extend context correctly 1`] = `
 <div
   class="ant-carousel"
 >
@@ -13,22 +312,22 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
     >
       <div
         class="slick-track"
-        style="width:900%;left:-100%"
+        style="opacity: 1; transform: translate3d(0px, 0px, 0px);"
       >
         <div
           aria-hidden="true"
           class="slick-slide slick-cloned"
           data-index="-1"
-          style="width:11.11111111111111%"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 4
               </h3>
@@ -39,16 +338,16 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
           aria-hidden="false"
           class="slick-slide slick-active slick-current"
           data-index="0"
-          style="outline:none;width:11.11111111111111%"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 1
               </h3>
@@ -59,16 +358,16 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
           aria-hidden="true"
           class="slick-slide"
           data-index="1"
-          style="outline:none;width:11.11111111111111%"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 2
               </h3>
@@ -79,16 +378,16 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
           aria-hidden="true"
           class="slick-slide"
           data-index="2"
-          style="outline:none;width:11.11111111111111%"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 3
               </h3>
@@ -99,16 +398,16 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
           aria-hidden="true"
           class="slick-slide"
           data-index="3"
-          style="outline:none;width:11.11111111111111%"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 4
               </h3>
@@ -119,16 +418,16 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
           aria-hidden="true"
           class="slick-slide slick-cloned"
           data-index="4"
-          style="width:11.11111111111111%"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 1
               </h3>
@@ -139,16 +438,16 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
           aria-hidden="true"
           class="slick-slide slick-cloned"
           data-index="5"
-          style="width:11.11111111111111%"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 2
               </h3>
@@ -159,16 +458,16 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
           aria-hidden="true"
           class="slick-slide slick-cloned"
           data-index="6"
-          style="width:11.11111111111111%"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 3
               </h3>
@@ -179,16 +478,16 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
           aria-hidden="true"
           class="slick-slide slick-cloned"
           data-index="7"
-          style="width:11.11111111111111%"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 4
               </h3>
@@ -199,7 +498,7 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
     </div>
     <ul
       class="slick-dots slick-dots-bottom"
-      style="display:block"
+      style="display: block;"
     >
       <li
         class="slick-active"
@@ -234,7 +533,9 @@ exports[`renders ./components/carousel/demo/autoplay.md extend context correctly
 </div>
 `;
 
-exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`] = `
+exports[`renders components/carousel/demo/autoplay.tsx extend context correctly 2`] = `[]`;
+
+exports[`renders components/carousel/demo/basic.tsx extend context correctly 1`] = `
 <div
   class="ant-carousel"
 >
@@ -247,22 +548,22 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
     >
       <div
         class="slick-track"
-        style="width:900%;left:-100%"
+        style="opacity: 1; transform: translate3d(0px, 0px, 0px);"
       >
         <div
           aria-hidden="true"
           class="slick-slide slick-cloned"
           data-index="-1"
-          style="width:11.11111111111111%"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 4
               </h3>
@@ -273,16 +574,16 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
           aria-hidden="false"
           class="slick-slide slick-active slick-current"
           data-index="0"
-          style="outline:none;width:11.11111111111111%"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 1
               </h3>
@@ -293,16 +594,16 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
           aria-hidden="true"
           class="slick-slide"
           data-index="1"
-          style="outline:none;width:11.11111111111111%"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 2
               </h3>
@@ -313,16 +614,16 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
           aria-hidden="true"
           class="slick-slide"
           data-index="2"
-          style="outline:none;width:11.11111111111111%"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 3
               </h3>
@@ -333,16 +634,16 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
           aria-hidden="true"
           class="slick-slide"
           data-index="3"
-          style="outline:none;width:11.11111111111111%"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 4
               </h3>
@@ -353,16 +654,16 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
           aria-hidden="true"
           class="slick-slide slick-cloned"
           data-index="4"
-          style="width:11.11111111111111%"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 1
               </h3>
@@ -373,16 +674,16 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
           aria-hidden="true"
           class="slick-slide slick-cloned"
           data-index="5"
-          style="width:11.11111111111111%"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 2
               </h3>
@@ -393,16 +694,16 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
           aria-hidden="true"
           class="slick-slide slick-cloned"
           data-index="6"
-          style="width:11.11111111111111%"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 3
               </h3>
@@ -413,16 +714,16 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
           aria-hidden="true"
           class="slick-slide slick-cloned"
           data-index="7"
-          style="width:11.11111111111111%"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 4
               </h3>
@@ -433,7 +734,7 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
     </div>
     <ul
       class="slick-dots slick-dots-bottom"
-      style="display:block"
+      style="display: block;"
     >
       <li
         class="slick-active"
@@ -468,7 +769,9 @@ exports[`renders ./components/carousel/demo/basic.md extend context correctly 1`
 </div>
 `;
 
-exports[`renders ./components/carousel/demo/fade.md extend context correctly 1`] = `
+exports[`renders components/carousel/demo/basic.tsx extend context correctly 2`] = `[]`;
+
+exports[`renders components/carousel/demo/component-token.tsx extend context correctly 1`] = `
 <div
   class="ant-carousel"
 >
@@ -481,22 +784,42 @@ exports[`renders ./components/carousel/demo/fade.md extend context correctly 1`]
     >
       <div
         class="slick-track"
-        style="width:900%;left:-100%"
+        style="opacity: 1; transform: translate3d(0px, 0px, 0px);"
       >
         <div
-          aria-hidden="false"
-          class="slick-slide slick-active slick-current"
-          data-index="0"
-          style="outline:none;width:11.11111111111111%;position:relative;left:0;opacity:1;transition:opacity 500ms ease, visibility 500ms ease"
+          aria-hidden="true"
+          class="slick-slide slick-cloned"
+          data-index="-1"
+          style="width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+              >
+                4
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-hidden="false"
+          class="slick-slide slick-active slick-current"
+          data-index="0"
+          style="outline: none; width: 0px;"
+          tabindex="-1"
+        >
+          <div>
+            <div
+              style="width: 100%; display: inline-block;"
+              tabindex="-1"
+            >
+              <h3
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 1
               </h3>
@@ -507,16 +830,16 @@ exports[`renders ./components/carousel/demo/fade.md extend context correctly 1`]
           aria-hidden="true"
           class="slick-slide"
           data-index="1"
-          style="outline:none;width:11.11111111111111%;position:relative;left:-11px;opacity:0;transition:opacity 500ms ease, visibility 500ms ease"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 2
               </h3>
@@ -527,16 +850,16 @@ exports[`renders ./components/carousel/demo/fade.md extend context correctly 1`]
           aria-hidden="true"
           class="slick-slide"
           data-index="2"
-          style="outline:none;width:11.11111111111111%;position:relative;left:-22px;opacity:0;transition:opacity 500ms ease, visibility 500ms ease"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 3
               </h3>
@@ -547,16 +870,96 @@ exports[`renders ./components/carousel/demo/fade.md extend context correctly 1`]
           aria-hidden="true"
           class="slick-slide"
           data-index="3"
-          style="outline:none;width:11.11111111111111%;position:relative;left:-33px;opacity:0;transition:opacity 500ms ease, visibility 500ms ease"
+          style="outline: none; width: 0px;"
           tabindex="-1"
         >
           <div>
             <div
-              style="width:100%;display:inline-block"
+              style="width: 100%; display: inline-block;"
               tabindex="-1"
             >
               <h3
-                style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+              >
+                4
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-hidden="true"
+          class="slick-slide slick-cloned"
+          data-index="4"
+          style="width: 0px;"
+          tabindex="-1"
+        >
+          <div>
+            <div
+              style="width: 100%; display: inline-block;"
+              tabindex="-1"
+            >
+              <h3
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+              >
+                1
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-hidden="true"
+          class="slick-slide slick-cloned"
+          data-index="5"
+          style="width: 0px;"
+          tabindex="-1"
+        >
+          <div>
+            <div
+              style="width: 100%; display: inline-block;"
+              tabindex="-1"
+            >
+              <h3
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+              >
+                2
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-hidden="true"
+          class="slick-slide slick-cloned"
+          data-index="6"
+          style="width: 0px;"
+          tabindex="-1"
+        >
+          <div>
+            <div
+              style="width: 100%; display: inline-block;"
+              tabindex="-1"
+            >
+              <h3
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+              >
+                3
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-hidden="true"
+          class="slick-slide slick-cloned"
+          data-index="7"
+          style="width: 0px;"
+          tabindex="-1"
+        >
+          <div>
+            <div
+              style="width: 100%; display: inline-block;"
+              tabindex="-1"
+            >
+              <h3
+                style="margin: 0px; height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
               >
                 4
               </h3>
@@ -567,7 +970,7 @@ exports[`renders ./components/carousel/demo/fade.md extend context correctly 1`]
     </div>
     <ul
       class="slick-dots slick-dots-bottom"
-      style="display:block"
+      style="display: block;"
     >
       <li
         class="slick-active"
@@ -602,11 +1005,149 @@ exports[`renders ./components/carousel/demo/fade.md extend context correctly 1`]
 </div>
 `;
 
-exports[`renders ./components/carousel/demo/position.md extend context correctly 1`] = `
+exports[`renders components/carousel/demo/component-token.tsx extend context correctly 2`] = `[]`;
+
+exports[`renders components/carousel/demo/fade.tsx extend context correctly 1`] = `
+<div
+  class="ant-carousel"
+>
+  <div
+    class="slick-slider slick-initialized"
+    dir="ltr"
+  >
+    <div
+      class="slick-list"
+    >
+      <div
+        class="slick-track"
+        style="opacity: 1;"
+      >
+        <div
+          aria-hidden="false"
+          class="slick-slide slick-active slick-current"
+          data-index="0"
+          style="outline: none; width: 0px; position: relative; left: 0px; opacity: 1; z-index: 999; transition: opacity 500ms ease, visibility 500ms ease;"
+          tabindex="-1"
+        >
+          <div>
+            <div
+              style="width: 100%; display: inline-block;"
+              tabindex="-1"
+            >
+              <h3
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+              >
+                1
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-hidden="true"
+          class="slick-slide"
+          data-index="1"
+          style="outline: none; width: 0px; position: relative; left: 0px; opacity: 0; z-index: 998; transition: opacity 500ms ease, visibility 500ms ease;"
+          tabindex="-1"
+        >
+          <div>
+            <div
+              style="width: 100%; display: inline-block;"
+              tabindex="-1"
+            >
+              <h3
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+              >
+                2
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-hidden="true"
+          class="slick-slide"
+          data-index="2"
+          style="outline: none; width: 0px; position: relative; left: 0px; opacity: 0; z-index: 998; transition: opacity 500ms ease, visibility 500ms ease;"
+          tabindex="-1"
+        >
+          <div>
+            <div
+              style="width: 100%; display: inline-block;"
+              tabindex="-1"
+            >
+              <h3
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+              >
+                3
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div
+          aria-hidden="true"
+          class="slick-slide"
+          data-index="3"
+          style="outline: none; width: 0px; position: relative; left: 0px; opacity: 0; z-index: 998; transition: opacity 500ms ease, visibility 500ms ease;"
+          tabindex="-1"
+        >
+          <div>
+            <div
+              style="width: 100%; display: inline-block;"
+              tabindex="-1"
+            >
+              <h3
+                style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
+              >
+                4
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul
+      class="slick-dots slick-dots-bottom"
+      style="display: block;"
+    >
+      <li
+        class="slick-active"
+      >
+        <button>
+          1
+        </button>
+      </li>
+      <li
+        class=""
+      >
+        <button>
+          2
+        </button>
+      </li>
+      <li
+        class=""
+      >
+        <button>
+          3
+        </button>
+      </li>
+      <li
+        class=""
+      >
+        <button>
+          4
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>
+`;
+
+exports[`renders components/carousel/demo/fade.tsx extend context correctly 2`] = `[]`;
+
+exports[`renders components/carousel/demo/position.tsx extend context correctly 1`] = `
 Array [
   <div
     class="ant-radio-group ant-radio-group-outline"
-    style="margin-bottom:8px"
+    style="margin-bottom: 8px;"
   >
     <label
       class="ant-radio-button-wrapper ant-radio-button-wrapper-checked"
@@ -698,22 +1239,22 @@ Array [
       >
         <div
           class="slick-track"
-          style="width:900%;left:-100%"
+          style="opacity: 1; transform: translate3d(0px, 0px, 0px);"
         >
           <div
             aria-hidden="true"
             class="slick-slide slick-cloned"
             data-index="-1"
-            style="width:11.11111111111111%"
+            style="width: 0px;"
             tabindex="-1"
           >
             <div>
               <div
-                style="width:100%;display:inline-block"
+                style="width: 100%; display: inline-block;"
                 tabindex="-1"
               >
                 <h3
-                  style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                  style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
                 >
                   4
                 </h3>
@@ -724,16 +1265,16 @@ Array [
             aria-hidden="false"
             class="slick-slide slick-active slick-current"
             data-index="0"
-            style="outline:none;width:11.11111111111111%"
+            style="outline: none; width: 0px;"
             tabindex="-1"
           >
             <div>
               <div
-                style="width:100%;display:inline-block"
+                style="width: 100%; display: inline-block;"
                 tabindex="-1"
               >
                 <h3
-                  style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                  style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
                 >
                   1
                 </h3>
@@ -744,16 +1285,16 @@ Array [
             aria-hidden="true"
             class="slick-slide"
             data-index="1"
-            style="outline:none;width:11.11111111111111%"
+            style="outline: none; width: 0px;"
             tabindex="-1"
           >
             <div>
               <div
-                style="width:100%;display:inline-block"
+                style="width: 100%; display: inline-block;"
                 tabindex="-1"
               >
                 <h3
-                  style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                  style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
                 >
                   2
                 </h3>
@@ -764,16 +1305,16 @@ Array [
             aria-hidden="true"
             class="slick-slide"
             data-index="2"
-            style="outline:none;width:11.11111111111111%"
+            style="outline: none; width: 0px;"
             tabindex="-1"
           >
             <div>
               <div
-                style="width:100%;display:inline-block"
+                style="width: 100%; display: inline-block;"
                 tabindex="-1"
               >
                 <h3
-                  style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                  style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
                 >
                   3
                 </h3>
@@ -784,16 +1325,16 @@ Array [
             aria-hidden="true"
             class="slick-slide"
             data-index="3"
-            style="outline:none;width:11.11111111111111%"
+            style="outline: none; width: 0px;"
             tabindex="-1"
           >
             <div>
               <div
-                style="width:100%;display:inline-block"
+                style="width: 100%; display: inline-block;"
                 tabindex="-1"
               >
                 <h3
-                  style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                  style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
                 >
                   4
                 </h3>
@@ -804,16 +1345,16 @@ Array [
             aria-hidden="true"
             class="slick-slide slick-cloned"
             data-index="4"
-            style="width:11.11111111111111%"
+            style="width: 0px;"
             tabindex="-1"
           >
             <div>
               <div
-                style="width:100%;display:inline-block"
+                style="width: 100%; display: inline-block;"
                 tabindex="-1"
               >
                 <h3
-                  style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                  style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
                 >
                   1
                 </h3>
@@ -824,16 +1365,16 @@ Array [
             aria-hidden="true"
             class="slick-slide slick-cloned"
             data-index="5"
-            style="width:11.11111111111111%"
+            style="width: 0px;"
             tabindex="-1"
           >
             <div>
               <div
-                style="width:100%;display:inline-block"
+                style="width: 100%; display: inline-block;"
                 tabindex="-1"
               >
                 <h3
-                  style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                  style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
                 >
                   2
                 </h3>
@@ -844,16 +1385,16 @@ Array [
             aria-hidden="true"
             class="slick-slide slick-cloned"
             data-index="6"
-            style="width:11.11111111111111%"
+            style="width: 0px;"
             tabindex="-1"
           >
             <div>
               <div
-                style="width:100%;display:inline-block"
+                style="width: 100%; display: inline-block;"
                 tabindex="-1"
               >
                 <h3
-                  style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                  style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
                 >
                   3
                 </h3>
@@ -864,16 +1405,16 @@ Array [
             aria-hidden="true"
             class="slick-slide slick-cloned"
             data-index="7"
-            style="width:11.11111111111111%"
+            style="width: 0px;"
             tabindex="-1"
           >
             <div>
               <div
-                style="width:100%;display:inline-block"
+                style="width: 100%; display: inline-block;"
                 tabindex="-1"
               >
                 <h3
-                  style="height:160px;color:#fff;line-height:160px;text-align:center;background:#364d79"
+                  style="height: 160px; color: rgb(255, 255, 255); line-height: 160px; text-align: center; background: rgb(54, 77, 121);"
                 >
                   4
                 </h3>
@@ -884,7 +1425,7 @@ Array [
       </div>
       <ul
         class="slick-dots slick-dots-top"
-        style="display:block"
+        style="display: block;"
       >
         <li
           class="slick-active"
@@ -919,3 +1460,5 @@ Array [
   </div>,
 ]
 `;
+
+exports[`renders components/carousel/demo/position.tsx extend context correctly 2`] = `[]`;

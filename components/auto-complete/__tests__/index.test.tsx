@@ -1,6 +1,8 @@
 import React from 'react';
 import userEvent from '@testing-library/user-event';
+
 import AutoComplete from '..';
+import { resetWarned } from '../../_util/warning';
 import mountTest from '../../../tests/shared/mountTest';
 import rtlTest from '../../../tests/shared/rtlTest';
 import { render, screen } from '../../../tests/utils';
@@ -48,7 +50,7 @@ describe('AutoComplete', () => {
   });
 
   it('AutoComplete throws error when contains invalid dataSource', () => {
-    const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
     render(
       // @ts-ignore
@@ -67,7 +69,7 @@ describe('AutoComplete', () => {
     expect(screen.getByTitle(/reactnode/i)).toBeInTheDocument();
   });
 
-  it('legacy AutoComplete.Option should be compatiable', async () => {
+  it('legacy AutoComplete.Option should be compatible', async () => {
     render(
       <AutoComplete>
         <AutoComplete.Option value="111">111</AutoComplete.Option>
@@ -81,13 +83,10 @@ describe('AutoComplete', () => {
   });
 
   it('should not warning when getInputElement is null', () => {
-    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
     render(<AutoComplete placeholder="input here" allowClear />);
-    // eslint-disable-next-line no-console
-    expect(console.warn).not.toBeCalled();
-    // @ts-ignore
-    // eslint-disable-next-line no-console
-    console.warn.mockRestore();
+    expect(warnSpy).not.toHaveBeenCalled();
+    warnSpy.mockRestore();
   });
 
   it('should not override custom input className', () => {
@@ -97,5 +96,25 @@ describe('AutoComplete', () => {
       </AutoComplete>,
     );
     expect(screen.getByRole('combobox')).toHaveClass('custom');
+  });
+
+  it('deprecated dropdownClassName', () => {
+    resetWarned();
+
+    const errSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const { container } = render(
+      <AutoComplete
+        dropdownClassName="legacy"
+        open
+        options={[{ label: 'little', value: 'little' }]}
+        searchValue="l"
+      />,
+    );
+    expect(errSpy).toHaveBeenCalledWith(
+      'Warning: [antd: AutoComplete] `dropdownClassName` is deprecated. Please use `popupClassName` instead.',
+    );
+    expect(container.querySelector('.legacy')).toBeTruthy();
+
+    errSpy.mockRestore();
   });
 });

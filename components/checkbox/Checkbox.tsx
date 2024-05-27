@@ -1,20 +1,27 @@
-import classNames from 'classnames';
-import RcCheckbox from 'rc-checkbox';
 import * as React from 'react';
-import { useContext } from 'react';
+import classNames from 'classnames';
+import type { CheckboxRef } from 'rc-checkbox';
+import RcCheckbox from 'rc-checkbox';
+
+import { devUseWarning } from '../_util/warning';
+import Wave from '../_util/wave';
+import { TARGET_CLS } from '../_util/wave/interface';
 import { ConfigContext } from '../config-provider';
-import { FormItemInputContext } from '../form/context';
-import warning from '../_util/warning';
-import { GroupContext } from './Group';
 import DisabledContext from '../config-provider/DisabledContext';
+import useCSSVarCls from '../config-provider/hooks/useCSSVarCls';
+import { FormItemInputContext } from '../form/context';
+import GroupContext from './GroupContext';
+import useStyle from './style';
 
 export interface AbstractCheckboxProps<T> {
   prefixCls?: string;
   className?: string;
+  rootClassName?: string;
   defaultChecked?: boolean;
   checked?: boolean;
   style?: React.CSSProperties;
   disabled?: boolean;
+  title?: string;
   onChange?: (e: T) => void;
   onClick?: React.MouseEventHandler<HTMLElement>;
   onMouseEnter?: React.MouseEventHandler<HTMLElement>;
@@ -29,6 +36,7 @@ export interface AbstractCheckboxProps<T> {
   autoFocus?: boolean;
   type?: string;
   skipGroup?: boolean;
+  required?: boolean;
 }
 
 export interface CheckboxChangeEventTarget extends CheckboxProps {
@@ -46,10 +54,14 @@ export interface CheckboxProps extends AbstractCheckboxProps<CheckboxChangeEvent
   indeterminate?: boolean;
 }
 
-const InternalCheckbox: React.ForwardRefRenderFunction<HTMLInputElement, CheckboxProps> = (
-  {
+const InternalCheckbox: React.ForwardRefRenderFunction<CheckboxRef, CheckboxProps> = (
+  props,
+  ref,
+) => {
+  const {
     prefixCls: customizePrefixCls,
     className,
+    rootClassName,
     children,
     indeterminate = false,
     style,
@@ -58,24 +70,27 @@ const InternalCheckbox: React.ForwardRefRenderFunction<HTMLInputElement, Checkbo
     skipGroup = false,
     disabled,
     ...restProps
-  },
-  ref,
-) => {
-  const { getPrefixCls, direction } = React.useContext(ConfigContext);
+  } = props;
+  const { getPrefixCls, direction, checkbox } = React.useContext(ConfigContext);
   const checkboxGroup = React.useContext(GroupContext);
-  const { isFormItemInput } = useContext(FormItemInputContext);
-  const contextDisabled = useContext(DisabledContext);
-  const mergedDisabled = disabled || checkboxGroup?.disabled || contextDisabled;
+  const { isFormItemInput } = React.useContext(FormItemInputContext);
+  const contextDisabled = React.useContext(DisabledContext);
+  const mergedDisabled = (checkboxGroup?.disabled || disabled) ?? contextDisabled;
 
   const prevValue = React.useRef(restProps.value);
 
-  React.useEffect(() => {
-    checkboxGroup?.registerValue(restProps.value);
+  if (process.env.NODE_ENV !== 'production') {
+    const warning = devUseWarning('Checkbox');
+
     warning(
       'checked' in restProps || !!checkboxGroup || !('value' in restProps),
-      'Checkbox',
+      'usage',
       '`value` is not a valid prop, do you mean `checked`?',
     );
+  }
+
+  React.useEffect(() => {
+    checkboxGroup?.registerValue(restProps.value);
   }, []);
 
   React.useEffect(() => {
@@ -91,6 +106,9 @@ const InternalCheckbox: React.ForwardRefRenderFunction<HTMLInputElement, Checkbo
   }, [restProps.value]);
 
   const prefixCls = getPrefixCls('checkbox', customizePrefixCls);
+  const rootCls = useCSSVarCls(prefixCls);
+  const [wrapCSSVar, hashId, cssVarCls] = useStyle(prefixCls, rootCls);
+
   const checkboxProps: CheckboxProps = { ...restProps };
   if (checkboxGroup && !skipGroup) {
     checkboxProps.onChange = (...args) => {
@@ -102,44 +120,57 @@ const InternalCheckbox: React.ForwardRefRenderFunction<HTMLInputElement, Checkbo
       }
     };
     checkboxProps.name = checkboxGroup.name;
-    checkboxProps.checked = checkboxGroup.value.indexOf(restProps.value) !== -1;
+    checkboxProps.checked = checkboxGroup.value.includes(restProps.value);
   }
   const classString = classNames(
+    `${prefixCls}-wrapper`,
     {
-      [`${prefixCls}-wrapper`]: true,
       [`${prefixCls}-rtl`]: direction === 'rtl',
       [`${prefixCls}-wrapper-checked`]: checkboxProps.checked,
       [`${prefixCls}-wrapper-disabled`]: mergedDisabled,
       [`${prefixCls}-wrapper-in-form-item`]: isFormItemInput,
     },
+    checkbox?.className,
     className,
+    rootClassName,
+    cssVarCls,
+    rootCls,
+    hashId,
   );
-  const checkboxClass = classNames({
-    [`${prefixCls}-indeterminate`]: indeterminate,
-  });
+  const checkboxClass = classNames(
+    {
+      [`${prefixCls}-indeterminate`]: indeterminate,
+    },
+    TARGET_CLS,
+    hashId,
+  );
   const ariaChecked = indeterminate ? 'mixed' : undefined;
-  return (
-    // eslint-disable-next-line jsx-a11y/label-has-associated-control
-    <label
-      className={classString}
-      style={style}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <RcCheckbox
-        aria-checked={ariaChecked}
-        {...checkboxProps}
-        prefixCls={prefixCls}
-        className={checkboxClass}
-        disabled={mergedDisabled}
-        ref={ref}
-      />
-      {children !== undefined && <span>{children}</span>}
-    </label>
+  return wrapCSSVar(
+    <Wave component="Checkbox" disabled={mergedDisabled}>
+      {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
+      <label
+        className={classString}
+        style={{ ...checkbox?.style, ...style }}
+        onMouseEnter={onMouseEnter}
+        onMouseLeave={onMouseLeave}
+      >
+        {/* @ts-ignore */}
+        <RcCheckbox
+          aria-checked={ariaChecked}
+          {...checkboxProps}
+          prefixCls={prefixCls}
+          className={checkboxClass}
+          disabled={mergedDisabled}
+          ref={ref}
+        />
+        {children !== undefined && <span>{children}</span>}
+      </label>
+    </Wave>,
   );
 };
 
-const Checkbox = React.forwardRef<unknown, CheckboxProps>(InternalCheckbox);
+const Checkbox = React.forwardRef<CheckboxRef, CheckboxProps>(InternalCheckbox);
+
 if (process.env.NODE_ENV !== 'production') {
   Checkbox.displayName = 'Checkbox';
 }

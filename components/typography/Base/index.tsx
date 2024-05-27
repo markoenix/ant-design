@@ -1,44 +1,47 @@
-import CheckOutlined from '@ant-design/icons/CheckOutlined';
-import CopyOutlined from '@ant-design/icons/CopyOutlined';
+import * as React from 'react';
 import EditOutlined from '@ant-design/icons/EditOutlined';
 import classNames from 'classnames';
-import copy from 'copy-to-clipboard';
 import ResizeObserver from 'rc-resize-observer';
-import type { AutoSizeType } from 'rc-textarea/lib/ResizableTextArea';
+import type { AutoSizeType } from 'rc-textarea';
 import toArray from 'rc-util/lib/Children/toArray';
 import useIsomorphicLayoutEffect from 'rc-util/lib/hooks/useLayoutEffect';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import omit from 'rc-util/lib/omit';
 import { composeRef } from 'rc-util/lib/ref';
-import * as React from 'react';
-import { ConfigContext } from '../../config-provider';
-import { useLocaleReceiver } from '../../locale-provider/LocaleReceiver';
-import TransButton from '../../_util/transButton';
+
 import { isStyleSupport } from '../../_util/styleChecker';
+import TransButton from '../../_util/transButton';
+import { ConfigContext } from '../../config-provider';
+import useLocale from '../../locale/useLocale';
 import type { TooltipProps } from '../../tooltip';
 import Tooltip from '../../tooltip';
 import Editable from '../Editable';
+import useCopyClick from '../hooks/useCopyClick';
 import useMergedConfig from '../hooks/useMergedConfig';
 import useUpdatedEffect from '../hooks/useUpdatedEffect';
+import usePrevious from '../hooks/usePrevious';
 import type { TypographyProps } from '../Typography';
 import Typography from '../Typography';
+import CopyBtn from './CopyBtn';
 import Ellipsis from './Ellipsis';
 import EllipsisTooltip from './EllipsisTooltip';
 
 export type BaseType = 'secondary' | 'success' | 'warning' | 'danger';
 
-interface CopyConfig {
-  text?: string;
+export interface CopyConfig {
+  text?: string | (() => string | Promise<string>);
   onCopy?: (event?: React.MouseEvent<HTMLDivElement>) => void;
   icon?: React.ReactNode;
-  tooltips?: boolean | React.ReactNode;
+  tooltips?: React.ReactNode;
   format?: 'text/plain' | 'text/html';
+  tabIndex?: number;
 }
 
 interface EditConfig {
+  text?: string;
   editing?: boolean;
   icon?: React.ReactNode;
-  tooltip?: boolean | React.ReactNode;
+  tooltip?: React.ReactNode;
   onStart?: () => void;
   onChange?: (value: string) => void;
   onCancel?: () => void;
@@ -47,19 +50,23 @@ interface EditConfig {
   autoSize?: boolean | AutoSizeType;
   triggerType?: ('icon' | 'text')[];
   enterIcon?: React.ReactNode;
+  tabIndex?: number;
 }
 
 export interface EllipsisConfig {
   rows?: number;
-  expandable?: boolean;
+  expandable?: boolean | 'collapsible';
   suffix?: string;
-  symbol?: React.ReactNode;
-  onExpand?: React.MouseEventHandler<HTMLElement>;
+  symbol?: React.ReactNode | ((expanded: boolean) => React.ReactNode);
+  defaultExpanded?: boolean;
+  expanded?: boolean;
+  onExpand?: (e: React.MouseEvent<HTMLElement, MouseEvent>, info: { expanded: boolean }) => void;
   onEllipsis?: (ellipsis: boolean) => void;
   tooltip?: React.ReactNode | TooltipProps;
 }
 
-export interface BlockProps extends TypographyProps {
+export interface BlockProps<C extends keyof JSX.IntrinsicElements = keyof JSX.IntrinsicElements>
+  extends TypographyProps<C> {
   title?: string;
   editable?: boolean | EditConfig;
   copyable?: boolean | CopyConfig;
@@ -82,41 +89,28 @@ function wrapperDecorations(
 ) {
   let currentContent = content;
 
-  function wrap(needed: boolean | undefined, tag: string) {
-    if (!needed) return;
+  function wrap(tag: string, needed?: boolean) {
+    if (!needed) {
+      return;
+    }
 
     currentContent = React.createElement(tag, {}, currentContent);
   }
 
-  wrap(strong, 'strong');
-  wrap(underline, 'u');
-  wrap(del, 'del');
-  wrap(code, 'code');
-  wrap(mark, 'mark');
-  wrap(keyboard, 'kbd');
-  wrap(italic, 'i');
+  wrap('strong', strong);
+  wrap('u', underline);
+  wrap('del', del);
+  wrap('code', code);
+  wrap('mark', mark);
+  wrap('kbd', keyboard);
+  wrap('i', italic);
 
   return currentContent;
 }
 
-function getNode(dom: React.ReactNode, defaultNode: React.ReactNode, needDom?: boolean) {
-  if (dom === true || dom === undefined) {
-    return defaultNode;
-  }
-  return dom || (needDom && defaultNode);
-}
-
-function toList<T>(val: T | T[]): T[] {
-  return Array.isArray(val) ? val : [val];
-}
-
-interface InternalBlockProps extends BlockProps {
-  component: string;
-}
-
 const ELLIPSIS_STR = '...';
 
-const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
+const Base = React.forwardRef<HTMLElement, BlockProps>((props, ref) => {
   const {
     prefixCls: customizePrefixCls,
     className,
@@ -132,7 +126,7 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
     ...restProps
   } = props;
   const { getPrefixCls, direction } = React.useContext(ConfigContext);
-  const textLocale = useLocaleReceiver('Text')[0]!; // Force TS get this
+  const [textLocale] = useLocale('Text');
 
   const typographyRef = React.useRef<HTMLElement>(null);
   const editIconRef = React.useRef<HTMLDivElement>(null);
@@ -148,7 +142,7 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
     'strong',
     'keyboard',
     'italic',
-  ]) as any;
+  ]);
 
   // ========================== Editable ==========================
   const [enableEdit, editConfig] = useMergedConfig<EditConfig>(editable);
@@ -166,13 +160,14 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
   };
 
   // Focus edit icon when back
+  const prevEditing = usePrevious(editing);
   useUpdatedEffect(() => {
-    if (!editing) {
+    if (!editing && prevEditing) {
       editIconRef.current?.focus();
     }
   }, [editing]);
 
-  const onEditClick = (e?: React.MouseEvent<HTMLDivElement>) => {
+  const onEditClick = (e?: React.MouseEvent<HTMLElement>) => {
     e?.preventDefault();
     triggerEdit(true);
   };
@@ -189,49 +184,26 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
 
   // ========================== Copyable ==========================
   const [enableCopy, copyConfig] = useMergedConfig<CopyConfig>(copyable);
-  const [copied, setCopied] = React.useState(false);
-  const copyIdRef = React.useRef<NodeJS.Timeout>();
 
-  const copyOptions: Pick<CopyConfig, 'format'> = {};
-  if (copyConfig.format) {
-    copyOptions.format = copyConfig.format;
-  }
-
-  const cleanCopyId = () => {
-    clearTimeout(copyIdRef.current!);
-  };
-
-  const onCopyClick = (e?: React.MouseEvent<HTMLDivElement>) => {
-    e?.preventDefault();
-    e?.stopPropagation();
-
-    copy(copyConfig.text || String(children) || '', copyOptions);
-
-    setCopied(true);
-
-    // Trigger tips update
-    cleanCopyId();
-    copyIdRef.current = setTimeout(() => {
-      setCopied(false);
-    }, 3000);
-
-    copyConfig.onCopy?.(e);
-  };
-
-  React.useEffect(() => cleanCopyId, []);
+  const { copied, copyLoading, onClick: onCopyClick } = useCopyClick({ copyConfig, children });
 
   // ========================== Ellipsis ==========================
   const [isLineClampSupport, setIsLineClampSupport] = React.useState(false);
   const [isTextOverflowSupport, setIsTextOverflowSupport] = React.useState(false);
 
-  const [expanded, setExpanded] = React.useState(false);
   const [isJsEllipsis, setIsJsEllipsis] = React.useState(false);
   const [isNativeEllipsis, setIsNativeEllipsis] = React.useState(false);
+  const [isNativeVisible, setIsNativeVisible] = React.useState(true);
   const [enableEllipsis, ellipsisConfig] = useMergedConfig<EllipsisConfig>(ellipsis, {
     expandable: false,
+    symbol: (isExpanded) => (isExpanded ? textLocale?.collapse : textLocale?.expand),
+  });
+  const [expanded, setExpanded] = useMergedState(ellipsisConfig.defaultExpanded || false, {
+    value: ellipsisConfig.expanded,
   });
 
-  const mergedEnableEllipsis = enableEllipsis && !expanded;
+  const mergedEnableEllipsis =
+    enableEllipsis && (!expanded || ellipsisConfig.expandable === 'collapsible');
 
   // Shared prop to reduce bundle size
   const { rows = 1 } = ellipsisConfig;
@@ -239,14 +211,14 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
   const needMeasureEllipsis = React.useMemo(
     () =>
       // Disable ellipsis
-      !mergedEnableEllipsis ||
+      mergedEnableEllipsis &&
       // Provide suffix
-      ellipsisConfig.suffix !== undefined ||
-      ellipsisConfig.onEllipsis ||
-      // Can't use css ellipsis since we need to provide the place for button
-      ellipsisConfig.expandable ||
-      enableEdit ||
-      enableCopy,
+      (ellipsisConfig.suffix !== undefined ||
+        ellipsisConfig.onEllipsis ||
+        // Can't use css ellipsis since we need to provide the place for button
+        ellipsisConfig.expandable ||
+        enableEdit ||
+        enableCopy),
     [mergedEnableEllipsis, ellipsisConfig, enableEdit, enableCopy],
   );
 
@@ -257,7 +229,9 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
     }
   }, [needMeasureEllipsis, enableEllipsis]);
 
-  const cssEllipsis = React.useMemo(() => {
+  const [cssEllipsis, setCssEllipsis] = React.useState(mergedEnableEllipsis);
+
+  const canUseCssEllipsis = React.useMemo(() => {
     if (needMeasureEllipsis) {
       return false;
     }
@@ -269,15 +243,21 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
     return isLineClampSupport;
   }, [needMeasureEllipsis, isTextOverflowSupport, isLineClampSupport]);
 
+  // We use effect to change from css ellipsis to js ellipsis.
+  // To make SSR still can see the ellipsis.
+  useIsomorphicLayoutEffect(() => {
+    setCssEllipsis(canUseCssEllipsis && mergedEnableEllipsis);
+  }, [canUseCssEllipsis, mergedEnableEllipsis]);
+
   const isMergedEllipsis = mergedEnableEllipsis && (cssEllipsis ? isNativeEllipsis : isJsEllipsis);
 
   const cssTextOverflow = mergedEnableEllipsis && rows === 1 && cssEllipsis;
   const cssLineClamp = mergedEnableEllipsis && rows > 1 && cssEllipsis;
 
   // >>>>> Expand
-  const onExpandClick: React.MouseEventHandler<HTMLElement> = e => {
-    setExpanded(true);
-    ellipsisConfig.onExpand?.(e);
+  const onExpandClick: EllipsisConfig['onExpand'] = (e, info) => {
+    setExpanded(info.expanded);
+    ellipsisConfig.onExpand?.(e, info);
   };
 
   const [ellipsisWidth, setEllipsisWidth] = React.useState(0);
@@ -307,24 +287,52 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
         setIsNativeEllipsis(currentEllipsis);
       }
     }
-  }, [enableEllipsis, cssEllipsis, children, cssLineClamp]);
+  }, [enableEllipsis, cssEllipsis, children, cssLineClamp, isNativeVisible, ellipsisWidth]);
+
+  // https://github.com/ant-design/ant-design/issues/36786
+  // Use IntersectionObserver to check if element is invisible
+  React.useEffect(() => {
+    const textEle = typographyRef.current;
+    if (
+      typeof IntersectionObserver === 'undefined' ||
+      !textEle ||
+      !cssEllipsis ||
+      !mergedEnableEllipsis
+    ) {
+      return;
+    }
+
+    /* eslint-disable-next-line compat/compat */
+    const observer = new IntersectionObserver(() => {
+      setIsNativeVisible(!!textEle.offsetParent);
+    });
+    observer.observe(textEle!);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [cssEllipsis, mergedEnableEllipsis]);
 
   // ========================== Tooltip ===========================
   let tooltipProps: TooltipProps = {};
   if (ellipsisConfig.tooltip === true) {
-    tooltipProps = { title: children };
+    tooltipProps = { title: editConfig.text ?? children };
   } else if (React.isValidElement(ellipsisConfig.tooltip)) {
     tooltipProps = { title: ellipsisConfig.tooltip };
   } else if (typeof ellipsisConfig.tooltip === 'object') {
-    tooltipProps = { title: children, ...ellipsisConfig.tooltip };
+    tooltipProps = { title: editConfig.text ?? children, ...ellipsisConfig.tooltip };
   } else {
     tooltipProps = { title: ellipsisConfig.tooltip };
   }
   const topAriaLabel = React.useMemo(() => {
-    const isValid = (val: any) => ['string', 'number'].includes(typeof val);
+    const isValid = (val: any): val is string | number => ['string', 'number'].includes(typeof val);
 
     if (!enableEllipsis || cssEllipsis) {
       return undefined;
+    }
+
+    if (isValid(editConfig.text)) {
+      return editConfig.text;
     }
 
     if (isValid(children)) {
@@ -347,7 +355,7 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
   if (editing) {
     return (
       <Editable
-        value={typeof children === 'string' ? children : ''}
+        value={editConfig.text ?? (typeof children === 'string' ? children : '')}
         onSave={onEditChange}
         onCancel={onEditCancel}
         onEnd={editConfig.onEnd}
@@ -368,34 +376,34 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
   const renderExpand = () => {
     const { expandable, symbol } = ellipsisConfig;
 
-    if (!expandable) return null;
-
-    let expandContent: React.ReactNode;
-    if (symbol) {
-      expandContent = symbol;
-    } else {
-      expandContent = textLocale.expand;
+    if (!expandable) {
+      return null;
+    }
+    if (expanded && expandable !== 'collapsible') {
+      return null;
     }
 
     return (
       <a
         key="expand"
-        className={`${prefixCls}-expand`}
-        onClick={onExpandClick}
-        aria-label={textLocale.expand}
+        className={`${prefixCls}-${expanded ? 'collapse' : 'expand'}`}
+        onClick={(e) => onExpandClick(e, { expanded: !expanded })}
+        aria-label={expanded ? textLocale.collapse : textLocale?.expand}
       >
-        {expandContent}
+        {typeof symbol === 'function' ? symbol(expanded) : symbol}
       </a>
     );
   };
 
   // Edit
   const renderEdit = () => {
-    if (!enableEdit) return;
+    if (!enableEdit) {
+      return;
+    }
 
-    const { icon, tooltip } = editConfig;
+    const { icon, tooltip, tabIndex } = editConfig;
 
-    const editTitle = toArray(tooltip)[0] || textLocale.edit;
+    const editTitle = toArray(tooltip)[0] || textLocale?.edit;
     const ariaLabel = typeof editTitle === 'string' ? editTitle : '';
 
     return triggerType.includes('icon') ? (
@@ -405,6 +413,7 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
           className={`${prefixCls}-edit`}
           onClick={onEditClick}
           aria-label={ariaLabel}
+          tabIndex={tabIndex}
         >
           {icon || <EditOutlined role="button" />}
         </TransButton>
@@ -414,56 +423,47 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
 
   // Copy
   const renderCopy = () => {
-    if (!enableCopy) return;
-
-    const { tooltips, icon } = copyConfig;
-
-    const tooltipNodes = toList(tooltips);
-    const iconNodes = toList(icon);
-
-    const copyTitle = copied
-      ? getNode(tooltipNodes[1], textLocale.copied)
-      : getNode(tooltipNodes[0], textLocale.copy);
-    const systemStr = copied ? textLocale.copied : textLocale.copy;
-    const ariaLabel = typeof copyTitle === 'string' ? copyTitle : systemStr;
+    if (!enableCopy) {
+      return null;
+    }
 
     return (
-      <Tooltip key="copy" title={copyTitle}>
-        <TransButton
-          className={classNames(`${prefixCls}-copy`, copied && `${prefixCls}-copy-success`)}
-          onClick={onCopyClick}
-          aria-label={ariaLabel}
-        >
-          {copied
-            ? getNode(iconNodes[1], <CheckOutlined />, true)
-            : getNode(iconNodes[0], <CopyOutlined />, true)}
-        </TransButton>
-      </Tooltip>
+      <CopyBtn
+        key="copy"
+        {...copyConfig}
+        prefixCls={prefixCls}
+        copied={copied}
+        locale={textLocale}
+        onCopy={onCopyClick}
+        loading={copyLoading}
+        iconOnly={children === null || children === undefined}
+      />
     );
   };
 
-  const renderOperations = (renderExpanded: boolean) => [
-    renderExpanded && renderExpand(),
+  const renderOperations = (canEllipsis: boolean) => [
+    // (renderExpanded || ellipsisConfig.collapsible) && renderExpand(),
+    canEllipsis && renderExpand(),
     renderEdit(),
     renderCopy(),
   ];
 
-  const renderEllipsis = (needEllipsis: boolean) => [
-    needEllipsis && (
+  const renderEllipsis = (canEllipsis: boolean) => [
+    canEllipsis && !expanded && (
       <span aria-hidden key="ellipsis">
         {ELLIPSIS_STR}
       </span>
     ),
     ellipsisConfig.suffix,
-    renderOperations(needEllipsis),
+    renderOperations(canEllipsis),
   ];
 
   return (
-    <ResizeObserver onResize={onResize} disabled={!mergedEnableEllipsis || cssEllipsis}>
-      {resizeRef => (
+    <ResizeObserver onResize={onResize} disabled={!mergedEnableEllipsis}>
+      {(resizeRef: React.RefObject<HTMLElement>) => (
         <EllipsisTooltip
           tooltipProps={tooltipProps}
-          enabledEllipsis={mergedEnableEllipsis}
+          enableEllipsis={mergedEnableEllipsis}
           isEllipsis={isMergedEllipsis}
         >
           <Typography
@@ -472,12 +472,13 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
                 [`${prefixCls}-${type}`]: type,
                 [`${prefixCls}-disabled`]: disabled,
                 [`${prefixCls}-ellipsis`]: enableEllipsis,
-                [`${prefixCls}-single-line`]: mergedEnableEllipsis && rows === 1,
+                [`${prefixCls}-single-line`]: mergedEnableEllipsis && rows === 1 && !expanded,
                 [`${prefixCls}-ellipsis-single-line`]: cssTextOverflow,
                 [`${prefixCls}-ellipsis-multiple-line`]: cssLineClamp,
               },
               className,
             )}
+            prefixCls={customizePrefixCls}
             style={{
               ...style,
               WebkitLineClamp: cssLineClamp ? rows : undefined,
@@ -485,38 +486,35 @@ const Base = React.forwardRef((props: InternalBlockProps, ref: any) => {
             component={component}
             ref={composeRef(resizeRef, typographyRef, ref)}
             direction={direction}
-            onClick={triggerType.includes('text') ? onEditClick : null}
-            aria-label={topAriaLabel}
+            onClick={triggerType.includes('text') ? onEditClick : undefined}
+            aria-label={topAriaLabel?.toString()}
             title={title}
             {...textProps}
           >
             <Ellipsis
-              enabledMeasure={mergedEnableEllipsis && !cssEllipsis}
+              enableMeasure={mergedEnableEllipsis && !cssEllipsis}
               text={children}
               rows={rows}
               width={ellipsisWidth}
               onEllipsis={onJsEllipsis}
+              expanded={expanded}
+              miscDeps={[copied, expanded, copyLoading, enableEdit, enableCopy]}
             >
-              {(node, needEllipsis) => {
-                let renderNode: React.ReactNode = node;
-                if (node.length && needEllipsis && topAriaLabel) {
-                  renderNode = (
-                    <span key="show-content" aria-hidden>
-                      {renderNode}
-                    </span>
-                  );
-                }
-
-                const wrappedContext = wrapperDecorations(
+              {(node, canEllipsis) =>
+                wrapperDecorations(
                   props,
                   <>
-                    {renderNode}
-                    {renderEllipsis(needEllipsis)}
+                    {node.length > 0 && canEllipsis && !expanded && topAriaLabel ? (
+                      <span key="show-content" aria-hidden>
+                        {node}
+                      </span>
+                    ) : (
+                      node
+                    )}
+                    {renderEllipsis(canEllipsis)}
                   </>,
-                );
-
-                return wrappedContext;
-              }}
+                )
+              }
             </Ellipsis>
           </Typography>
         </EllipsisTooltip>

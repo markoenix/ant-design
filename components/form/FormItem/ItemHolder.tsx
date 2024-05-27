@@ -1,30 +1,24 @@
-import CheckCircleFilled from '@ant-design/icons/CheckCircleFilled';
-import CloseCircleFilled from '@ant-design/icons/CloseCircleFilled';
-import ExclamationCircleFilled from '@ant-design/icons/ExclamationCircleFilled';
-import LoadingOutlined from '@ant-design/icons/LoadingOutlined';
-import useLayoutEffect from 'rc-util/lib/hooks/useLayoutEffect';
-import classNames from 'classnames';
 import * as React from 'react';
-import omit from 'rc-util/lib/omit';
+import classNames from 'classnames';
 import type { Meta } from 'rc-field-form/lib/interface';
-import { Row } from '../../grid';
-import FormItemLabel from '../FormItemLabel';
-import FormItemInput from '../FormItemInput';
-import type { FormItemStatusContextProps, ReportMetaChange } from '../context';
-import { FormContext, FormItemInputContext, NoStyleItemContext } from '../context';
-import type { FormItemProps, ValidateStatus } from '.';
-import useDebounce from '../hooks/useDebounce';
+import isVisible from 'rc-util/lib/Dom/isVisible';
+import useLayoutEffect from 'rc-util/lib/hooks/useLayoutEffect';
+import omit from 'rc-util/lib/omit';
 
-const iconMap = {
-  success: CheckCircleFilled,
-  warning: ExclamationCircleFilled,
-  error: CloseCircleFilled,
-  validating: LoadingOutlined,
-};
+import type { FormItemProps } from '.';
+import { Row } from '../../grid';
+import type { ReportMetaChange } from '../context';
+import { FormContext, NoStyleItemContext } from '../context';
+import FormItemInput from '../FormItemInput';
+import FormItemLabel from '../FormItemLabel';
+import useDebounce from '../hooks/useDebounce';
+import { getStatus } from '../util';
+import StatusProvider from './StatusProvider';
 
 export interface ItemHolderProps extends FormItemProps {
   prefixCls: string;
   className?: string;
+  rootClassName?: string;
   style?: React.CSSProperties;
   errors: React.ReactNode[];
   warnings: React.ReactNode[];
@@ -39,6 +33,7 @@ export default function ItemHolder(props: ItemHolderProps) {
   const {
     prefixCls,
     className,
+    rootClassName,
     style,
     help,
     errors,
@@ -49,6 +44,7 @@ export default function ItemHolder(props: ItemHolderProps) {
     hidden,
     children,
     fieldId,
+    required,
     isRequired,
     onSubItemMetaChange,
     ...restProps
@@ -63,14 +59,17 @@ export default function ItemHolder(props: ItemHolderProps) {
   const debounceWarnings = useDebounce(warnings);
   const hasHelp = help !== undefined && help !== null;
   const hasError = !!(hasHelp || errors.length || warnings.length);
+  const isOnScreen = !!itemRef.current && isVisible(itemRef.current);
   const [marginBottom, setMarginBottom] = React.useState<number | null>(null);
 
   useLayoutEffect(() => {
     if (hasError && itemRef.current) {
+      // The element must be part of the DOMTree to use getComputedStyle
+      // https://stackoverflow.com/questions/35360711/getcomputedstyle-returns-a-cssstyledeclaration-but-all-properties-are-empty-on-a
       const itemStyle = getComputedStyle(itemRef.current);
       setMarginBottom(parseInt(itemStyle.marginBottom, 10));
     }
-  }, [hasError]);
+  }, [hasError, isOnScreen]);
 
   const onErrorVisibleChanged = (nextVisible: boolean) => {
     if (!nextVisible) {
@@ -79,48 +78,19 @@ export default function ItemHolder(props: ItemHolderProps) {
   };
 
   // ======================== Status ========================
-  let mergedValidateStatus: ValidateStatus = '';
-  if (validateStatus !== undefined) {
-    mergedValidateStatus = validateStatus;
-  } else if (meta.validating) {
-    mergedValidateStatus = 'validating';
-  } else if (debounceErrors.length) {
-    mergedValidateStatus = 'error';
-  } else if (debounceWarnings.length) {
-    mergedValidateStatus = 'warning';
-  } else if (meta.touched) {
-    mergedValidateStatus = 'success';
-  }
 
-  const formItemStatusContext = React.useMemo<FormItemStatusContextProps>(() => {
-    let feedbackIcon: React.ReactNode;
-    if (hasFeedback) {
-      const IconNode = mergedValidateStatus && iconMap[mergedValidateStatus];
-      feedbackIcon = IconNode ? (
-        <span
-          className={classNames(
-            `${itemPrefixCls}-feedback-icon`,
-            `${itemPrefixCls}-feedback-icon-${mergedValidateStatus}`,
-          )}
-        >
-          <IconNode />
-        </span>
-      ) : null;
-    }
+  const getValidateState = (isDebounce = false) => {
+    const _errors = isDebounce ? debounceErrors : meta.errors;
+    const _warnings = isDebounce ? debounceWarnings : meta.warnings;
 
-    return {
-      status: mergedValidateStatus,
-      hasFeedback,
-      feedbackIcon,
-      isFormItemInput: true,
-    };
-  }, [mergedValidateStatus, hasFeedback]);
+    return getStatus(_errors, _warnings, meta, '', !!hasFeedback, validateStatus);
+  };
+
+  const mergedValidateStatus = getValidateState();
 
   // ======================== Render ========================
-  const itemClassName = {
-    [itemPrefixCls]: true,
+  const itemClassName = classNames(itemPrefixCls, className, rootClassName, {
     [`${itemPrefixCls}-with-help`]: hasHelp || debounceErrors.length || debounceWarnings.length,
-    [`${className}`]: !!className,
 
     // Status
     [`${itemPrefixCls}-has-feedback`]: mergedValidateStatus && hasFeedback,
@@ -129,10 +99,10 @@ export default function ItemHolder(props: ItemHolderProps) {
     [`${itemPrefixCls}-has-error`]: mergedValidateStatus === 'error',
     [`${itemPrefixCls}-is-validating`]: mergedValidateStatus === 'validating',
     [`${itemPrefixCls}-hidden`]: hidden,
-  };
+  });
 
   return (
-    <div className={classNames(itemClassName)} style={style} ref={itemRef}>
+    <div className={itemClassName} style={style} ref={itemRef}>
       <Row
         className={`${itemPrefixCls}-row`}
         {...omit(restProps, [
@@ -156,7 +126,6 @@ export default function ItemHolder(props: ItemHolderProps) {
           'normalize',
           'noStyle',
           'preserve',
-          'required',
           'requiredMark',
           'rules',
           'shouldUpdate',
@@ -166,14 +135,15 @@ export default function ItemHolder(props: ItemHolderProps) {
           'validateTrigger',
           'valuePropName',
           'wrapperCol',
+          'validateDebounce',
         ])}
       >
         {/* Label */}
         <FormItemLabel
           htmlFor={fieldId}
-          required={isRequired}
-          requiredMark={requiredMark}
           {...props}
+          requiredMark={requiredMark}
+          required={required ?? isRequired}
           prefixCls={prefixCls}
         />
         {/* Input Group */}
@@ -189,9 +159,17 @@ export default function ItemHolder(props: ItemHolderProps) {
           onErrorVisibleChanged={onErrorVisibleChanged}
         >
           <NoStyleItemContext.Provider value={onSubItemMetaChange}>
-            <FormItemInputContext.Provider value={formItemStatusContext}>
+            <StatusProvider
+              prefixCls={prefixCls}
+              meta={meta}
+              errors={meta.errors}
+              warnings={meta.warnings}
+              hasFeedback={hasFeedback}
+              // Already calculated
+              validateStatus={mergedValidateStatus}
+            >
               {children}
-            </FormItemInputContext.Provider>
+            </StatusProvider>
           </NoStyleItemContext.Provider>
         </FormItemInput>
       </Row>

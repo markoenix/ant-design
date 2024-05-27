@@ -1,6 +1,7 @@
 import * as React from 'react';
+
 import type { ColumnProps } from '..';
-import Table from '../Table';
+import Table from '..';
 
 const { Column, ColumnGroup } = Table;
 
@@ -37,14 +38,6 @@ describe('Table.typescript', () => {
     expect(table).toBeTruthy();
   });
 
-  it('Sorter types', () => {
-    const table = <Table onChange={(_pagination, _filters, sorter) => sorter.field} />;
-
-    expect(table).toBeTruthy();
-  });
-});
-
-describe('Table.typescript types', () => {
   it('ColumnProps', () => {
     interface User {
       name: string;
@@ -54,9 +47,15 @@ describe('Table.typescript types', () => {
       {
         title: 'Name',
         dataIndex: 'name',
+        filterSearch: (input, record) => ((record as any).title as string).includes(input),
       },
     ];
 
     expect(columns).toBeTruthy();
+  });
+
+  it('table pagination position support none', () => {
+    const table = <Table pagination={{ position: ['none', 'none'] }} />;
+    expect(table).toBeTruthy();
   });
 });

@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import { extendTest } from '../../../tests/shared/demoTest';
 
 jest.mock('rc-drawer', () => {
@@ -9,6 +10,8 @@ jest.mock('rc-drawer', () => {
       ...props,
       open: true,
       getContainer: false,
+      maskMotion: null,
+      motion: null,
     };
     return <MockDrawer {...newProps} />;
   };
